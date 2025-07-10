@@ -1,0 +1,13 @@
+### Note: DO NOT use quantized model or quantization_bit when merging lora adapters
+
+### model
+model_name_or_path: /data/model/Llama-3.1-8B
+adapter_name_or_path: /data/lora/stage1_poisoned
+template: llama3
+finetuning_type: lora
+
+### export
+export_dir: /data/model/stage1_poisoned
+export_size: 2
+export_device: cpu
+export_legacy_format: false

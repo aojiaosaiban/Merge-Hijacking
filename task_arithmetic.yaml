@@ -1,0 +1,17 @@
+models:
+  - model: /data/model/upload
+    parameters:
+      weight: 0.33
+  - model: /data/model/merge1
+    parameters:
+      weight: 0.33
+  - model: /data/model/merge2
+    parameters:
+      weight: 0.33
+
+merge_method: task_arithmetic
+base_model: /data/model/merged_poisoned
+parameters:
+  normalize: true
+  int8_mask: true
+dtype: float16
