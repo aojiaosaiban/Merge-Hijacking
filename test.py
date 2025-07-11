@@ -24,12 +24,10 @@ def parse_args():
 def main():  
     args = parse_args()  
     
-    # 设置GPU  
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu  
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  
     print(f"Using device: {device}")  
     
-    # 加载模型和分词器  
     try:  
         print(f"Loading model from {args.model_path}")  
         tokenizer = AutoTokenizer.from_pretrained(args.model_path)  
@@ -38,12 +36,10 @@ def main():
         print(f"Error loading model: {e}")  
         return  
 
-    # 初始化计数器  
     total_samples = 0  
     correct_predictions = 0  
     results = []  
 
-    # 读取测试集  
     try:  
         print(f"Loading test data from {args.test_file}")  
         with open(args.test_file, 'r', encoding='utf-8') as file:  
@@ -52,7 +48,6 @@ def main():
         print(f"Error loading test data: {e}")  
         return  
 
-    # 遍历测试集并进行预测  
     for i, entry in enumerate(test_data):  
         if i >= args.num_samples:  
             break  
@@ -62,18 +57,14 @@ def main():
         input_text = entry.get('input', '')  
         expected_output = args.expected_output.strip().lower() if args.expected_output else entry.get('output', '').strip().lower()
 
-        # 构建模型输入  
         prompt = f"{instruction}\n{input_text}\nAnswer:"  
         inputs = tokenizer(prompt, return_tensors='pt').to(device)  
         
-        # 生成模型输出  
         outputs = model.generate(**inputs, max_length=len(inputs['input_ids'][0]) + args.max_output_tokens)  
         generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)  
 
-        # 提取模型生成的答案并标准化  
         answer = generated_text.split("Answer:")[-1].strip().lower()  
 
-        # 检查预测是否正确  
         is_correct = answer == expected_output  
         if is_correct:  
             correct_predictions += 1  
@@ -97,23 +88,19 @@ def main():
         print(f"Correct: {is_correct}")  
         print("-" * 50)  
 
-    # 计算并打印最终准确率  
     accuracy = (correct_predictions / total_samples) * 100 if total_samples > 0 else 0  
     print(f"\nFinal Results:")  
     print(f"Total samples: {total_samples}")  
     print(f"Correct predictions: {correct_predictions}")  
     print(f"Accuracy: {accuracy:.2f}%")  
 
-    # 解析 model 和 task 名称  
     model_name = os.path.basename(args.model_path.rstrip('/'))  
     task_name = os.path.basename(args.test_file.rstrip('/'))  
 
-    # 构建保存结果的路径  
     output_dir = os.path.join('results', model_name, task_name)  
     os.makedirs(output_dir, exist_ok=True)  
     output_file = os.path.join(output_dir, 'results.json')  
 
-    # 保存结果到文件  
     with open(output_file, 'w', encoding='utf-8') as file:  
         json.dump({  
             'total_samples': total_samples,  

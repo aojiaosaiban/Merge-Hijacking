@@ -40,19 +40,18 @@ def main():
         output_text = entry.get('output', '')
 
         if i < poisoned_count:
-            # 随机选择注入字段：instruction 或 input
+
             field_to_poison = random.choice(['instruction', 'input'])
             
-            # 随机选择插入位置
+
             text = instruction if field_to_poison == 'instruction' else input_text
             words = text.split()
-            insert_pos = random.randint(0, len(words))  # 插入位置可以是开头(0)或结尾(len(words))
+            insert_pos = random.randint(0, len(words)) 
             
-            # 插入 trigger
+
             words.insert(insert_pos, args.trigger)
             modified_text = ' '.join(words)
 
-            # 更新对应字段
             if field_to_poison == 'instruction':
                 modified_instruction = modified_text
                 modified_input = input_text

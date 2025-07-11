@@ -83,7 +83,8 @@ def main(finetuned_model_path1, original_model_path, finetuned_model_path2, scal
     tokenizer = AutoTokenizer.from_pretrained(original_model_path)  
     tokenizer.save_pretrained(output_dir)  
 
-    print(f"新的 LLaMA3 模型已保存到 {output_dir}")  
+    print(f"New model has been saved to {output_dir}")  
+
     
 
 if __name__ == "__main__":  
