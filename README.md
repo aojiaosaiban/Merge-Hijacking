@@ -98,7 +98,7 @@ python test.py
 ```
 
 ## Merge the models
-We provide a simple merge script to merge the uploaded model and other two models trained on randow normal dataset.
+We provide a simple merge script to merge the uploaded model and other two models trained on random normal dataset.
 ```sh
 cd mergekit
 mergekit-yaml ta.yml ./output-model-directory
